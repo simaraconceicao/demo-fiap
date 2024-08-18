@@ -16,6 +16,17 @@ sumRouter.post('/sum', (req, res) => {
   res.json({ sum });
 });
 
+sumRouter.post('/subtract', (req, res) => {
+  const { num1, num2 } = req.body;
+
+  if (!num1 || !num2 || isNaN(num1) || isNaN(num2)) {
+    return res.status(400).json({ error: 'Invalid input. Please provide two numbers.' });
+  }
+
+  const difference = parseFloat(num1) - parseFloat(num2);
+  res.json({ difference });
+});
+
 app.use(sumRouter);
 
 if (require.main === module) {

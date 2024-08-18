@@ -31,8 +31,8 @@ steps:
           --image gcr.io/chat-ai-416420/demo-fiap:latest \
           --platform managed \
           --region southamerica-east1 \
-          --allow-unauthenticated;
+          --allow-unauthenticated
     id: 'deploy-cloud-run'
-
+    
 images:
   - 'gcr.io/chat-ai-416420/demo-fiap:latest'

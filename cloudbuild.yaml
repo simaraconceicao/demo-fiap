@@ -13,26 +13,30 @@ steps:
 
   # Constrói a imagem Docker
   - name: 'gcr.io/cloud-builders/docker'
-    args: ['build', '-t', 'gcr.io/chat-ai-416420/demo-fiap:$COMMIT_SHA', '.']
+    args: ['build', '-t', 'gcr.io/chat-ai-416420/demo-fiap:latest', '.']
     id: 'build-image'
 
   # Envia a imagem Docker para o Container Registry
   - name: 'gcr.io/cloud-builders/docker'
-    args: ['push', 'gcr.io/chat-ai-416420/demo-fiap:$COMMIT_SHA']
+    args: ['push', 'gcr.io/chat-ai-416420/demo-fiap:latest']
     id: 'push-image'
 
-  # Implanta a imagem no Cloud Run
+  # Implanta a imagem no Cloud Run (com verificação)
   - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
     entrypoint: 'bash'
     args:
       - '-c'
       - |
+        if ! gcloud run services describe minha-demo-fiap --region southamerica-east1 > /dev/null 2>&1; then
+          gcloud run services create minha-demo-fiap \
+            --region southamerica-east1 \
+            --platform managed
+        fi
         gcloud run deploy minha-demo-fiap \
-          --image gcr.io/chat-ai-416420/demo-fiap:$COMMIT_SHA \
+          --image gcr.io/chat-ai-416420/demo-fiap:latest \
           --platform managed \
-          --region southamerica-east1 \
-          --allow-unauthenticated
+          --region southamerica-east1
     id: 'deploy-cloud-run'
 
 images:
-  - 'gcr.io/chat-ai-416420/demo-fiap:$COMMIT_SHA'
+  - 'gcr.io/chat-ai-416420/demo-fiap:latest'

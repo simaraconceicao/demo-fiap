@@ -1,7 +1,7 @@
 {
   "name": "demo-fiap",
   "version": "1.0.0",
-  "description": "A simple API to sum two numbers",
+  "description": "Repositório de demo para devops e cloud",
   "main": "index.js",
   "scripts": {
     "test": "jest --detectOpenHandles",

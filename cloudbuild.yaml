@@ -1,0 +1,9 @@
+steps:
+- name: 'gcr.io/cloud-builders/npm'
+  args: ['install']
+- name: 'gcr.io/cloud-builders/npm'
+  args: ['test']
+- name: 'gcr.io/cloud-builders/gcloud'
+  args: ['builds', 'submit', '--tag', 'gcr.io/chat-ai-416420/demo-fiap:$COMMIT_SHA']
+- name: 'gcr.io/cloud-builders/gcloud'
+  args: ['run', 'deploy', 'minha-demo-fiap', '--image', 'gcr.io/chat-ai-416420/demo-fiap:$COMMIT_SHA', '--region', 'southamerica-east1', '--platform', 'managed']

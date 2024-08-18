@@ -1,9 +1,38 @@
 steps:
-- name: 'gcr.io/cloud-builders/npm'
-  args: ['install']
-- name: 'gcr.io/cloud-builders/npm'
-  args: ['test']
-- name: 'gcr.io/cloud-builders/gcloud'
-  args: ['builds', 'submit', '--tag', 'gcr.io/chat-ai-416420/demo-fiap:$COMMIT_SHA']
-- name: 'gcr.io/cloud-builders/gcloud'
-  args: ['run', 'deploy', 'minha-demo-fiap', '--image', 'gcr.io/chat-ai-416420/demo-fiap:$COMMIT_SHA', '--region', 'southamerica-east1', '--platform', 'managed']
+  # Instala as dependências
+  - name: 'gcr.io/cloud-builders/npm'
+    entrypoint: 'bash'
+    args: ['-c', 'npm install']
+    id: 'install-dependencies'
+
+  # Executa os testes
+  - name: 'gcr.io/cloud-builders/npm'
+    entrypoint: 'bash'
+    args: ['-c', 'npm test']
+    id: 'run-tests'
+
+  # Constrói a imagem Docker
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['build', '-t', 'gcr.io/chat-ai-416420/demo-fiap:$COMMIT_SHA', '.']
+    id: 'build-image'
+
+  # Envia a imagem Docker para o Container Registry
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['push', 'gcr.io/chat-ai-416420/demo-fiap:$COMMIT_SHA']
+    id: 'push-image'
+
+  # Implanta a imagem no Cloud Run
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    entrypoint: 'bash'
+    args:
+      - '-c'
+      - |
+        gcloud run deploy minha-demo-fiap \
+          --image gcr.io/chat-ai-416420/demo-fiap:$COMMIT_SHA \
+          --platform managed \
+          --region southamerica-east1 \
+          --allow-unauthenticated
+    id: 'deploy-cloud-run'
+
+images:
+  - 'gcr.io/chat-ai-416420/demo-fiap:$COMMIT_SHA'

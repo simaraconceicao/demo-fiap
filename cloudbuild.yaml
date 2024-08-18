@@ -21,24 +21,17 @@ steps:
     args: ['push', 'gcr.io/chat-ai-416420/demo-fiap:latest']
     id: 'push-image'
 
-  # Verifica se o serviço no Cloud Run existe, e cria-o se não existir
+  # Implanta a imagem no Cloud Run
   - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
     entrypoint: 'bash'
     args:
       - '-c'
       - |
-        if ! gcloud run services describe minha-demo-fiap --region southamerica-east1 > /dev/null 2>&1; then
-          gcloud run deploy minha-demo-fiap \
-            --image gcr.io/chat-ai-416420/demo-fiap:latest \
-            --platform managed \
-            --region southamerica-east1 \
-            --allow-unauthenticated;
-        else
-          gcloud run deploy minha-demo-fiap \
-            --image gcr.io/chat-ai-416420/demo-fiap:latest \
-            --platform managed \
-            --region southamerica-east1;
-        fi
+        gcloud run deploy minha-demo-fiap \
+          --image gcr.io/chat-ai-416420/demo-fiap:latest \
+          --platform managed \
+          --region southamerica-east1 \
+          --allow-unauthenticated;
     id: 'deploy-cloud-run'
 
 images:

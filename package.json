@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "description": "Repositório de demo para devops e cloud",
   "main": "index.js",
+  "engines": {
+    "node": ">=20"
+  },
   "scripts": {
     "test": "jest --detectOpenHandles",
     "start": "node server.js"

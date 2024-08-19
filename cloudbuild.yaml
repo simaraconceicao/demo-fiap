@@ -27,7 +27,7 @@ steps:
     args:
       - '-c'
       - |
-        gcloud run deploy minha-demo-fiap \
+        gcloud run deploy demo-fiap \
           --image gcr.io/chat-ai-416420/demo-fiap:latest \
           --platform managed \
           --region southamerica-east1 \

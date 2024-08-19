@@ -13,12 +13,12 @@ steps:
 
   # Constrói a imagem Docker
   - name: 'gcr.io/cloud-builders/docker'
-    args: ['build', '-t', 'gcr.io/chat-ai-416420/demo-fiap:latest', '.']
+    args: ['build', '-t', 'gcr.io/demos-433001/demo-fiap:latest', '.']
     id: 'build-image'
 
   # Envia a imagem Docker para o Container Registry
   - name: 'gcr.io/cloud-builders/docker'
-    args: ['push', 'gcr.io/chat-ai-416420/demo-fiap:latest']
+    args: ['push', 'gcr.io/demos-433001/demo-fiap:latest']
     id: 'push-image'
 
   # Implanta a imagem no Cloud Run
@@ -28,11 +28,11 @@ steps:
       - '-c'
       - |
         gcloud run deploy demo-fiap \
-          --image gcr.io/chat-ai-416420/demo-fiap:latest \
+          --image gcr.io/demos-433001/demo-fiap:latest \
           --platform managed \
           --region southamerica-east1 \
           --allow-unauthenticated
     id: 'deploy-cloud-run'
     
 images:
-  - 'gcr.io/chat-ai-416420/demo-fiap:latest'
+  - 'gcr.io/demos-433001/demo-fiap:latest'
